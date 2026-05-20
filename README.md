@@ -71,19 +71,19 @@ OS:
 ## HTTP only
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/tariq-abdullah/watermark-server/main/install-watermark-server.sh | sudo bash
+curl -fsSL https://raw.githubusercontent.com/tariq-abdullah/image-watermarking-server-on-the-fly/main/install-watermark-server.sh | sudo bash
 ```
 
 ## HTTPS enabled
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/tariq-abdullah/watermark-server/main/install-watermark-server.sh | sudo bash -s wm.yourdomain.com
+curl -fsSL https://raw.githubusercontent.com/tariq-abdullah/image-watermarking-server-on-the-fly/main/install-watermark-server.sh | sudo bash -s wm.yourdomain.com
 ```
 
 Example:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/tariq-abdullah/watermark-server/main/install-watermark-server.sh | sudo bash -s wm.example.com
+curl -fsSL https://raw.githubusercontent.com/tariq-abdullah/image-watermarking-server-on-the-fly/main/install-watermark-server.sh | sudo bash -s wm.example.com
 ```
 
 Before HTTPS install:
