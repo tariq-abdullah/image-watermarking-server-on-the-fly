@@ -53,8 +53,9 @@ Recommended VM:
 | Low/Medium | 1 vCPU / 2GB RAM |
 | High | 2 vCPU / 4GB RAM |
 
-Recommended providers:
+Recommended Cloud providers:
 
+- ServerMango
 - DigitalOcean
 - Hetzner
 - Vultr
@@ -70,19 +71,19 @@ OS:
 ## HTTP only
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/watermark-server/main/install-watermark-server.sh | sudo bash
+curl -fsSL https://raw.githubusercontent.com/tariq-abdullah/watermark-server/main/install-watermark-server.sh | sudo bash
 ```
 
 ## HTTPS enabled
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/watermark-server/main/install-watermark-server.sh | sudo bash -s wm.yourdomain.com
+curl -fsSL https://raw.githubusercontent.com/tariq-abdullah/watermark-server/main/install-watermark-server.sh | sudo bash -s wm.yourdomain.com
 ```
 
 Example:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/watermark-server/main/install-watermark-server.sh | sudo bash -s wm.example.com
+curl -fsSL https://raw.githubusercontent.com/tariq-abdullah/watermark-server/main/install-watermark-server.sh | sudo bash -s wm.example.com
 ```
 
 Before HTTPS install:
