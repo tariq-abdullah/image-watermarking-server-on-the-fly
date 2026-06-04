@@ -1,6 +1,6 @@
 # Watermark Image Server
 
-Fast on-the-fly image watermarking server with:
+Fast on-the-fly image watermarking server with OCR text extraction:
 
 - JWT-secured requests
 - DigitalOcean Spaces support
@@ -9,6 +9,7 @@ Fast on-the-fly image watermarking server with:
 - Auto-start on reboot
 - Nginx reverse proxy
 - libvips high-performance image processing
+- **PaddleOCR text extraction (Port 5001)**
 
 Designed for:
 - E-Paper systems
@@ -29,10 +30,14 @@ Designed for:
 ✅ Auto restart on crash  
 ✅ Auto start on reboot  
 ✅ Local disk cache  
+✅ **PaddleOCR text extraction via REST API**  
+✅ **Markdown-formatted OCR results**  
 ✅ Supports:
 - JPG
 - PNG
 - WEBP
+- TIFF
+- BMP
 
 ✅ Position presets:
 - top-left
@@ -164,6 +169,103 @@ without server secret.
 
 ---
 
+# PaddleOCR API Server
+
+A companion OCR service running on **port 5001** for extracting text from images.
+
+## Features
+
+✅ Fast PaddleOCR-based text extraction  
+✅ Returns results in **Markdown format**  
+✅ Supports file uploads and URLs  
+✅ Auto-restart on failure  
+✅ Auto-start on reboot  
+✅ Confidence score reporting  
+✅ Supports: JPG, PNG, WEBP, BMP, TIFF  
+
+## API Endpoints
+
+### Health Check
+```bash
+curl http://localhost:5001/health
+```
+
+### Extract text from file
+```bash
+curl -F "image=@image.jpg" http://localhost:5001/ocr
+```
+
+### Extract text from URL
+```bash
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"url": "https://example.com/image.jpg"}' \
+  http://localhost:5001/ocr/url
+```
+
+## Response Format
+
+All responses include extracted text in **Markdown format** with confidence scores:
+
+```json
+{
+  "success": true,
+  "markdown": "# OCR Result\n\nExtracted text organized by lines\n\n---\n*Average confidence: 95.2%*",
+  "raw_detections": 42
+}
+```
+
+## Configuration
+
+Edit `/etc/watermark-server.env`:
+
+```bash
+OCR_PORT=5001              # Default: 5001
+CACHE_DIR=/opt/watermark-server/cache
+MAX_IMAGE_BYTES=8000000    # 8MB max image size
+```
+
+## Service Management
+
+```bash
+# Start the OCR service
+systemctl start ocr-api.service
+
+# Stop the OCR service
+systemctl stop ocr-api.service
+
+# Restart the OCR service
+systemctl restart ocr-api.service
+
+# Check status
+systemctl status ocr-api.service
+
+# View logs
+journalctl -u ocr-api.service -f
+```
+
+## Performance
+
+- **First request**: 3-5 seconds (model initialization)
+- **Subsequent requests**: 1-2 seconds
+- **Memory usage**: ~350MB (models cached in memory)
+- **Request handling**: Sequential processing
+
+## Example Usage
+
+### Test OCR on file:
+```bash
+curl -F "image=@invoice.jpg" http://localhost:5001/ocr | python3 -m json.tool
+```
+
+### Test OCR on remote image:
+```bash
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"url": "https://example.com/document.png"}' \
+  http://localhost:5001/ocr/url | python3 -m json.tool
+```
+
+---
+
 # Recommended Production Setup
 
 ```text
@@ -222,10 +324,12 @@ systemctl enable nginx
 
 | Item | Path |
 |---|---|
-| App | `/opt/watermark-server` |
+| Watermark App | `/opt/watermark-server/app.py` |
+| OCR API App | `/opt/watermark-server/ocr-api.py` |
 | Cache | `/opt/watermark-server/cache` |
 | Config | `/etc/watermark-server.env` |
-| Service | `/etc/systemd/system/watermark-server.service` |
+| Watermark Service | `/etc/systemd/system/watermark-server.service` |
+| OCR API Service | `/etc/systemd/system/ocr-api.service` |
 
 ---
 
